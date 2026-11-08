@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reader</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@500;700&family=Readex+Pro:wght@300;400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="reader">
+<header class="topbar">
+  <a class="tool" href="./">Library</a>
+  <h1 id="book-title" dir="auto"></h1>
+  <button id="fullscreen" class="tool" type="button">Full screen</button>
+</header>
+
+<main id="stage" class="stage">
+  <div id="book" class="book" hidden>
+    <div id="edge-verso" class="edge verso-side"></div>
+    <div id="edge-recto" class="edge recto-side"></div>
+    <div id="verso" class="page verso-side"><img alt="" draggable="false" decoding="sync"><i class="cast"></i></div>
+    <div id="recto" class="page recto-side"><img alt="" draggable="false" decoding="sync"><i class="cast"></i></div>
+    <div id="leaf" class="leaf recto-side" hidden></div>
+    <div id="gutter" class="gutter"></div>
+  </div>
+  <p id="message" class="notice" hidden></p>
+</main>
+
+<footer id="controls" class="controls" hidden>
+  <button id="turn-left" class="turn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <input id="slider" type="range" min="1" step="1" aria-label="Go to page">
+  <output id="position" aria-live="polite"></output>
+  <button id="turn-right" class="turn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+</footer>
+<script src="reader.js"></script>
+</body>
+</html>
