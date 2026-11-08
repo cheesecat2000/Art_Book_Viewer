@@ -1,0 +1,58 @@
+name: Publish library
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          lfs: true
+
+      - name: Install document converters and fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libreoffice-writer libreoffice-impress libreoffice-calc \
+            poppler-utils pandoc \
+            fonts-noto-core fonts-noto-extra fonts-liberation fonts-dejavu-core \
+            fonts-crosextra-carlito fonts-crosextra-caladea fonts-hosny-amiri
+          python3 -m pip install --break-system-packages pillow
+
+      - name: Reuse books that have not changed
+        uses: actions/cache@v6
+        with:
+          path: .cache
+          key: books-${{ hashFiles('assets/**', 'scripts/build.py') }}
+          restore-keys: books-
+
+      - name: Build the site
+        run: python3 scripts/build.py
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
